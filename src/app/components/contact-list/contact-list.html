@@ -1,0 +1,67 @@
+<div class="contact-list">
+  <!-- Header -->
+  <div class="list-header">
+    <span class="material-icons menu-icon">menu</span>
+    <h2>Contacts</h2>
+    <div class="nav-arrows">
+      <button class="icon-btn"><span class="material-icons">chevron_left</span></button>
+      <button class="icon-btn"><span class="material-icons">chevron_right</span></button>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-section">
+    <p class="search-label">Search for a contact</p>
+    <div class="search-box">
+      <input type="text" placeholder="Name, email or phone number" (input)="onSearch($event)" />
+      <span class="material-icons search-icon">search</span>
+    </div>
+  </div>
+
+  <!-- Contact Items -->
+  <div class="contact-items">
+    @for (contact of filteredContacts(); track contact.id) {
+      <div
+        class="contact-item"
+        [class.active]="selectedContactId() === contact.id"
+        (click)="onSelectContact(contact)"
+      >
+        <!-- Avatar -->
+        <div class="avatar-wrapper">
+          @if (contact.avatar) {
+            <img [src]="contact.avatar" [alt]="contact.name" class="avatar" />
+          } @else {
+            <div class="avatar avatar-placeholder">
+              {{ contact.name.charAt(0) }}
+            </div>
+          }
+          <span class="status-dot" [class]="contact.status"></span>
+        </div>
+
+        <!-- Info -->
+        <div class="contact-info">
+          <span class="contact-name">{{ contact.name }}</span>
+          <span class="contact-role">{{ contact.role }}</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="contact-actions">
+          <button class="icon-btn-small" (click)="$event.stopPropagation()">
+            <span class="material-icons">chat_bubble_outline</span>
+          </button>
+          <button class="icon-btn-small" (click)="$event.stopPropagation()">
+            <span class="material-icons">phone</span>
+          </button>
+          <button class="icon-btn-small" (click)="$event.stopPropagation()">
+            <span class="material-icons">more_horiz</span>
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <div class="no-results">
+        <span class="material-icons">search_off</span>
+        <p>No contacts found</p>
+      </div>
+    }
+  </div>
+</div>

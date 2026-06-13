@@ -1,0 +1,10 @@
+.contact-dashboard {
+  display: flex;
+
+  .contact-list {
+    flex-basis: 40%;
+  }
+  .contact-detail {
+    flex-basis: 60%;
+  }
+}
