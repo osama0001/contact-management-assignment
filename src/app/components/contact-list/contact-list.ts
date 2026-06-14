@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, output, signal } from '@angular/core';
-import { Contact } from '../../types/contact.type';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Contact } from '../../types/contact.model';
+import { ContactsService } from '../../services/contacts.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -9,26 +10,13 @@ import { Contact } from '../../types/contact.type';
   styleUrl: './contact-list.scss',
 })
 export class ContactList {
-  contacts = input<Contact[]>([]);
-  selectedContactId = input<number | null>(null);
+  protected svc = inject(ContactsService);
 
-  contactSelected = output<Contact>();
-
-  searchQuery = signal('');
-
-  filteredContacts = computed(() => {
-    const query = this.searchQuery().toLowerCase();
-    return this.contacts().filter(
-      (c) => c.name.toLowerCase().includes(query) || c.role.toLowerCase().includes(query),
-    );
-  });
-
-  onSearch(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchQuery.set(value);
+  onSearch(event: Event): void {
+    this.svc.setSearch((event.target as HTMLInputElement).value);
   }
 
-  onSelectContact(contact: Contact) {
-    this.contactSelected.emit(contact);
+  onSelect(contact: Contact): void {
+    this.svc.selectContact(contact);
   }
 }

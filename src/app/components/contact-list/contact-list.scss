@@ -67,9 +67,12 @@
       flex: 1;
       border: none;
       outline: none;
-      font-size: 13px;
       color: #333;
       background: transparent;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 100%;
+      letter-spacing: 0px;
 
       &::placeholder {
         color: #bbb;
@@ -194,13 +197,7 @@
 .contact-actions {
   display: flex;
   gap: 4px;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-
-  .contact-item:hover &,
-  .contact-item.active & {
-    opacity: 1;
-  }
+  opacity: 1;
 }
 
 .icon-btn {
@@ -217,11 +214,15 @@
 
   .material-icons {
     font-size: 16px;
-    color: #7c5cbf;
+    color: #1a1a2e;
+    transition: color 0.15s;
   }
 
   &:hover {
-    background: #ebe8ff;
+    background: #4d4cac1a;
+    .material-icons {
+      color: #6b59cc;
+    }
   }
 }
 
@@ -235,15 +236,19 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: color 0.15s;
 
   .material-icons {
     font-size: 16px;
-    color: #7c5cbf;
+    color: #1a1a2e;
+    transition: color 0.15s;
   }
 
   &:hover {
-    background: #ebe8ff;
+    background: #4d4cac1a;
+    .material-icons {
+      color: #6b59cc;
+    }
   }
 }
 

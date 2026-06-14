@@ -1,1 +1,140 @@
-<p>contact-detail works!</p>
+@if (svc.isDetailPageLoading()) {
+  <div class="state-centered">
+    <span class="material-icons spinning">refresh</span>
+    <p>Loading...</p>
+  </div>
+} @else if (svc.hasDetailError()) {
+  <div class="state-centered error">
+    <span class="material-icons">error_outline</span>
+    <p>Failed to load contact</p>
+  </div>
+} @else if (svc.selectedContactDetail(); as contact) {
+  <div class="detail-panel">
+    <!-- ── Header ── -->
+    <div class="detail-header">
+      <img [src]="contact.avatar" [alt]="contact.fullName" class="avatar" />
+
+      <div class="header-meta">
+        <div class="header-info">
+          <h2>{{ contact.fullName }}</h2>
+          <span class="job-title">{{ contact.jobTitle }}</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-primary">
+            <span class="material-icons">chat</span>
+            Message
+          </button>
+          <button class="icon-btn">
+            <span class="material-icons">phone</span>
+          </button>
+          <button class="icon-btn">
+            <span class="material-icons">crop_square</span>
+          </button>
+          <button class="icon-btn">
+            <span class="material-icons">more_horiz</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Body ── -->
+    <div class="detail-body">
+      <!-- Bio -->
+      @if (contact.bio) {
+        <div class="detail-row">
+          <span class="row-label">Bio</span>
+          <p class="row-value">{{ contact.bio }}</p>
+        </div>
+        <div class="divider"></div>
+      }
+
+      <!-- Email -->
+      @if (svc.selectedContactEmails(); as emails) {
+        <div class="detail-row">
+          <span class="row-label">Email</span>
+          <div class="row-value">
+            <div class="row-item">
+              <span>{{ emails.primary }}</span>
+              <span class="badge">Primary</span>
+            </div>
+            @if (emails.secondary) {
+              <div class="row-item">
+                <span>{{ emails.secondary }}</span>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="divider"></div>
+      }
+
+      <!-- Dial -->
+      @if (contact.dial) {
+        <div class="detail-row">
+          <span class="row-label">Dial</span>
+          <span class="row-value">{{ contact.dial }}</span>
+        </div>
+        <div class="divider"></div>
+      }
+
+      <!-- Meeting -->
+      @if (contact.meeting) {
+        <div class="detail-row">
+          <span class="row-label">Meeting</span>
+          <a [href]="contact.meeting" target="_blank" class="row-value link">
+            {{ contact.meeting }}
+          </a>
+        </div>
+        <div class="divider"></div>
+      }
+
+      <!-- Phone -->
+      @if (contact.phones?.length) {
+        <div class="detail-row">
+          <span class="row-label">Phone</span>
+          <div class="row-value">
+            @for (phone of contact.phones; track phone.number) {
+              <div class="row-item">
+                <span>{{ phone.number }}</span>
+                @if (phone.primary) {
+                  <span class="badge">Primary</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="divider"></div>
+      }
+
+      <!-- Social -->
+      <div class="detail-row">
+        <span class="row-label">Social</span>
+        <div class="row-value social-icons">
+          <a class="social-btn" target="_blank" [href]="contact.social?.facebook || '#'">
+            <img src="https://cdn.simpleicons.org/facebook/555" width="14" alt="Facebook" />
+          </a>
+          <a class="social-btn" target="_blank" [href]="contact.social?.pinterest || '#'">
+            <img src="https://cdn.simpleicons.org/pinterest/555" width="14" alt="Pinterest" />
+          </a>
+          <a class="social-btn" target="_blank" [href]="contact.social?.twitter || '#'">
+            <img src="https://cdn.simpleicons.org/x/555" width="14" alt="Twitter" />
+          </a>
+          <a class="social-btn" target="_blank" [href]="contact.social?.linkedin || '#'">
+            <img
+              src="https://www.svgrepo.com/show/120652/linkedin-logo.svg"
+              width="14"
+              alt="LinkedIn"
+            />
+          </a>
+          <a class="social-btn" target="_blank" [href]="contact.social?.google || '#'">
+            <img src="https://cdn.simpleicons.org/google/555" width="14" alt="Google" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="state-centered">
+    <span class="material-icons">person_outline</span>
+    <p>Select a contact to view details</p>
+  </div>
+}

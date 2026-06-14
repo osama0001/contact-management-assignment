@@ -1,59 +1,114 @@
-# ContactManagementAssignment
+# Contact Management Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.1.
+A contact management application built with Angular 22, using signal-based architecture, `httpResource` for reactive data fetching, and the `@Service` decorator.
 
-## Development server
+---
 
-To start a local development server, run:
+## Requirements
 
-```bash
-ng serve
-```
+| Tool        | Version |
+| ----------- | ------- |
+| Node.js     | `22.x`  |
+| npm         | `11.x`  |
+| Angular CLI | `22.x`  |
+| TypeScript  | `6.x`   |
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Getting Started
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 1. Clone the repository
 
 ```bash
-ng generate --help
+git clone <your-repo-url>
+cd contact-management-assignment
 ```
 
-## Building
-
-To build the project run:
+### 2. Install dependencies
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### 3. Start the development server
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
+The app will be available at `http://localhost:4200`
 
-For end-to-end (e2e) testing, run:
+---
+
+## Available Scripts
+
+| Script          | Description                         |
+| --------------- | ----------------------------------- |
+| `npm start`     | Start the development server        |
+| `npm run build` | Build the app for production        |
+| `npm run watch` | Build in watch mode for development |
+| `npm test`      | Run unit tests with Vitest          |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── contact-dashboard/     # Smart container component
+│   │   ├── contact-list/          # Dumb component — renders contact list
+│   │   └── contact-detail/        # Dumb component — renders selected contact
+│   ├── services/
+│   │   └── contacts.service.ts    # All API calls and shared signal state
+│   └── types/
+│       ├── contact.model.ts       # DTOs and domain interfaces
+│       └── contact.mapper.ts      # DTO → domain model transformations
+├── styles.scss                    # Global styles and Material Icons import
+```
+
+---
+
+## API Endpoints
+
+| Method | Endpoint                        | Description                             |
+| ------ | ------------------------------- | --------------------------------------- |
+| `GET`  | `/contacts`                     | Returns all contacts                    |
+| `GET`  | `/contacts/:id`                 | Returns a single contact's full details |
+| `GET`  | `/contacts/:id/email_addresses` | Returns email addresses for a contact   |
+
+Base URL: `https://6a2da49a2edd4cb330d1567b.mockapi.io/api`
+
+---
+
+## Angular 22 Features Used
+
+- **`@Service()`** — replaces `@Injectable({ providedIn: 'root' })`, root singleton by default
+- **`httpResource()`** — stable signal-native HTTP fetching with built-in loading/error state
+- **`input()`** — signal-based component inputs replacing `@Input()`
+- **`output()`** — signal-based outputs replacing `@Output()`
+- **`signal()`** — local reactive state
+- **`computed()`** — derived state that reacts automatically to signal changes
+- **`inject()`** — functional dependency injection replacing constructor injection
+- **`@for / @if / @empty`** — built-in control flow replacing `*ngFor` / `*ngIf`
+- **OnPush by default** — all new components use OnPush change detection automatically
+
+---
+
+## Testing
+
+Tests are written with **Vitest**. Run them with:
 
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## Notes
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Material Icons are installed via the `material-icons` npm package and imported globally in `styles.scss`
+- Sass `@use` is used instead of the deprecated `@import`
+- Status field from the API is a boolean — `true` maps to `online`, `false` maps to `offline`
+- Email addresses are fetched from a separate endpoint and merged in the detail view

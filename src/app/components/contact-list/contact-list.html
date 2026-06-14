@@ -14,54 +14,67 @@
     <p class="search-label">Search for a contact</p>
     <div class="search-box">
       <input type="text" placeholder="Name, email or phone number" (input)="onSearch($event)" />
-      <span class="material-icons search-icon">search</span>
+      <span class="material-icons">search</span>
     </div>
   </div>
 
-  <!-- Contact Items -->
-  <div class="contact-items">
-    @for (contact of filteredContacts(); track contact.id) {
-      <div
-        class="contact-item"
-        [class.active]="selectedContactId() === contact.id"
-        (click)="onSelectContact(contact)"
-      >
-        <!-- Avatar -->
-        <div class="avatar-wrapper">
-          @if (contact.avatar) {
-            <img [src]="contact.avatar" [alt]="contact.name" class="avatar" />
-          } @else {
-            <div class="avatar avatar-placeholder">
-              {{ contact.name.charAt(0) }}
-            </div>
-          }
-          <span class="status-dot" [class]="contact.status"></span>
+  <!-- Loading -->
+  @if (svc.isLoading()) {
+    <div class="state-message">
+      <span class="material-icons spinning">refresh</span>
+      <p>Loading contacts...</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @else if (svc.hasError()) {
+    <div class="state-message error">
+      <span class="material-icons">error_outline</span>
+      <p>Failed to load contacts</p>
+    </div>
+  }
+
+  <!-- List -->
+  @else {
+    <div class="contact-items">
+      @for (contact of svc.filteredContacts(); track contact.id) {
+        <div
+          class="contact-item"
+          [class.active]="svc.selectedContact()?.id === contact.id"
+          (click)="onSelect(contact)"
+        >
+          <!-- Avatar -->
+          <div class="avatar-wrapper">
+            <img [src]="contact.avatar" [alt]="contact.fullName" class="avatar" />
+            <span class="status-dot" [class]="contact.status"></span>
+          </div>
+
+          <!-- Info -->
+          <div class="contact-info">
+            <span class="contact-name">{{ contact.fullName }}</span>
+            <span class="contact-role">{{ contact.jobTitle }}</span>
+          </div>
+
+          <!-- Actions -->
+          <div class="contact-actions">
+            <button class="icon-btn" (click)="$event.stopPropagation()">
+              <span class="material-icons">chat_bubble_outline</span>
+            </button>
+            <button class="icon-btn" (click)="$event.stopPropagation()">
+              <span class="material-icons">phone</span>
+            </button>
+            <button class="icon-btn" (click)="$event.stopPropagation()">
+              <span class="material-icons">more_horiz</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Info -->
-        <div class="contact-info">
-          <span class="contact-name">{{ contact.name }}</span>
-          <span class="contact-role">{{ contact.role }}</span>
+      } @empty {
+        <div class="state-message">
+          <span class="material-icons">search_off</span>
+          <p>No contacts found</p>
         </div>
-
-        <!-- Actions -->
-        <div class="contact-actions">
-          <button class="icon-btn-small" (click)="$event.stopPropagation()">
-            <span class="material-icons">chat_bubble_outline</span>
-          </button>
-          <button class="icon-btn-small" (click)="$event.stopPropagation()">
-            <span class="material-icons">phone</span>
-          </button>
-          <button class="icon-btn-small" (click)="$event.stopPropagation()">
-            <span class="material-icons">more_horiz</span>
-          </button>
-        </div>
-      </div>
-    } @empty {
-      <div class="no-results">
-        <span class="material-icons">search_off</span>
-        <p>No contacts found</p>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  }
 </div>
